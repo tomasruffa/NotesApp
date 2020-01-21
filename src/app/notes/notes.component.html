@@ -1,0 +1,69 @@
+<div class="w-100 p-4 h-calc">
+    <mat-grid-list cols="2" rowHeight="1:0.8" gutterSize="50px">
+        <mat-grid-tile class="shadow">
+            <div class="h-100 w-100 flex-column">
+                <div class="d-flex justify-content-center">
+                    <h3 *ngIf="!modifying">Agrega tu nota</h3>
+                    <h3 *ngIf="modifying">Edita la nota</h3>
+                </div>
+                <div>
+                    <form [formGroup]="notesForm" class="h-100 d-flex flex-column align-items-center">
+                        <mat-form-field class="w-50">
+                            <input maxlength="30" formControlName="title" matInput placeholder="Titulo de nota">
+                        </mat-form-field>
+                        <mat-form-field class="w-50">
+                            <textarea class="max-h" matAutosizeMaxRows="8" formControlName="description"
+                                matInput placeholder="Descripción"></textarea>
+                        </mat-form-field>
+                        <mat-form-field class="w-50">
+                            <mat-label>Seleccione un color</mat-label>
+                            <mat-select formControlName="color">
+                                <mat-option *ngFor="let color of colorsArray" [value]="color.value">
+                                    {{color.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <button *ngIf="!modifying" [disabled]="!notesForm.valid" (click)="addNote('add')" class="w-25"
+                            mat-flat-button color="primary">Agregar nota</button>
+                        <button *ngIf="modifying" [disabled]="!notesForm.valid" (click)="addNote('edit')" class="w-25"
+                            mat-flat-button color="primary">Editar nota</button>
+                    </form>
+                </div>
+            </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="shadow">
+            <div class="h-100 w-100">
+                <div class="h-100">
+                    <mat-list class="d-flex flex-column h-100">
+                        <h3 class="align-self-center">Notas</h3>
+                        <span class="align-self-center" *ngIf="notes.length == 0">
+                            Aun no se ingreso ninguna nota, porfavor complete el registro de notas que se encuentra a la
+                            izquierda
+                        </span>
+                        <mat-spinner *ngIf="spinner" diameter="50" class="align-self-center"></mat-spinner>
+                        <div class="h-100 overflow-auto">
+                            <div class="d-flex mt-2" *ngFor="let note of notes, let i = index">
+                                <mat-list-item class="h-100 w-90">
+                                    <mat-icon mat-list-icon [ngStyle]="{'color': note.color}">note</mat-icon>
+                                    <div class="d-flex flex-column">
+                                        <h6 class="mat-list-text" mat-line>{{note.title}}</h6>
+                                        <p class="text-break mat-list-text">{{note.description}}</p>
+                                    </div>
+                                    <mat-divider></mat-divider>
+                                </mat-list-item>
+                                <div class="d-flex justify-content-center align-items-center w-5">
+                                    <mat-icon (click)="modifyNote(i)" class="cursor-pointer" mat-list-icon>edit
+                                    </mat-icon>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-center w-5">
+                                    <mat-icon (click)="deleteNote(i)" class="cursor-pointer" mat-list-icon>delete
+                                    </mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-list>
+                </div>
+            </div>
+        </mat-grid-tile>
+    </mat-grid-list>
+</div>
